@@ -14,9 +14,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('list');
+});
+
+Route::get('/folder/{id}', function ($id) {
+    echo $id;
+    return view('folder');
 });
 
 Route::get('/folder', function () {
     return view('folder');
+});
+
+Route::get('/file/{id}', function ($id) {
+    echo $id;
+    return view('file');
+});
+
+Route::get('/file', function () {
+    return view('file');
 });
