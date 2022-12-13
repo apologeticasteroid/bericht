@@ -18,7 +18,6 @@ Route::get('/', function () {
 });
 
 Route::get('/folder/{id}', function ($id) {
-    echo $id;
     return view('folder');
 });
 
@@ -27,7 +26,6 @@ Route::get('/folder', function () {
 });
 
 Route::get('/file/{id}', function ($id) {
-    echo $id;
     return view('file');
 });
 
