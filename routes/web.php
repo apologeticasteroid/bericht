@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,21 +16,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('list');
-});
+    $headers = [
+        'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',   'Content-type'        => 'text/csv',   'Content-Disposition' => 'attachment; filename=galleries.csv',   'Expires'             => '0',   'Pragma'              => 'public'
+    ];
 
-Route::get('/folder/{id}', function ($id) {
-    return view('folder');
-});
+    $list = DB::select('select * from employee;');
+    DB::select('select * from employee');
 
-Route::get('/folder', function () {
-    return view('folder');
-});
+    echo typeof($list);
 
-Route::get('/file/{id}', function ($id) {
-    return view('file');
-});
+    # add headers for each column in the CSV download
+    array_unshift($list, array_keys($list[0]));
 
-Route::get('/file', function () {
-    return view('file');
+    $callback = function () use ($list) {
+        $FH = fopen('php://output', 'w');
+        foreach ($list as $row) {
+            fputcsv($FH, $row);
+        }
+        fclose($FH);
+    };
+
+    return response()->stream($callback, 200, $headers);
 });
